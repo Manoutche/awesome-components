@@ -7,9 +7,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./complex-form.component.scss']
 })
 export class ComplexFormComponentComponent implements OnInit {
-  sendForm() {
 
-  }
 
   mainForm!: FormGroup
   personalInfoForm!: FormGroup
@@ -21,6 +19,7 @@ export class ComplexFormComponentComponent implements OnInit {
   passwordCtrl!: FormControl
   confirmPasswordCtrls!: FormControl
   loginForm!: FormGroup
+  emailRegex!: RegExp;
 
   constructor (private formbuild : FormBuilder){
 
@@ -29,6 +28,7 @@ export class ComplexFormComponentComponent implements OnInit {
   ngOnInit():void {
     this.initFormControl()
     this.initMaimForm()
+    this.emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   }
 
   private initFormControl() {
@@ -38,8 +38,9 @@ export class ComplexFormComponentComponent implements OnInit {
     })
     this.contactPreferenceCtrl = this.formbuild.control('email')
     this.phoneCtrl = this.formbuild.control('')
-    this.emailCtrl = this.formbuild.control('')
-    this.confirmEmailCtrl = this.formbuild.control('')
+    this.emailCtrl = this.formbuild.control('',Validators.pattern(this.emailRegex))
+    this.confirmEmailCtrl = this.formbuild.control('',Validators.pattern(this.emailRegex))
+
     this.emailFrom  = this.formbuild.group({
       email: this.emailCtrl,
       confirm: this.confirmEmailCtrl
@@ -49,7 +50,7 @@ export class ComplexFormComponentComponent implements OnInit {
     this.loginForm = this.formbuild.group({
       password: this.passwordCtrl,
       confirmPassword: this.confirmPasswordCtrls,
-      username: ['', Validators.required]
+      username: ['', [Validators.required, Validators.min(10)]]
     })
 
   }
@@ -60,7 +61,13 @@ export class ComplexFormComponentComponent implements OnInit {
       contactPreference: this.contactPreferenceCtrl,
       email: this.emailFrom,
       loginInfo: this.loginForm,
-      phone: this.phoneCtrl
+      phone: this.phoneCtrl,
+      confirm: this.confirmEmailCtrl
     })
+  }
+
+  sendForm() {
+    console.log(this.mainForm.value);
+
   }
 }
