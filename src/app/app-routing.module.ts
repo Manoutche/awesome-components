@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren: () => import('./social-media/social-media.module').then(m =>m.SocialMediaModule)
   },
   {
+    path: 'form-complexe',
+    loadChildren: () => import('./complex-form/complex-form.module').then(m =>m.ComplexFormModuleModule)
+  },
+  {
     path: '**', /** Nimporte quelle route qui n'st pas reconnu  */
     redirectTo : 'social-media'
   }
