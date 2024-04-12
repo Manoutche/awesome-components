@@ -9,7 +9,7 @@ import { ComplexFormService } from './services/complex-form.service';
 
 @NgModule({
   declarations: [
-    ComplexFormComponentComponent
+    ComplexFormComponentComponent,
   ],
   imports: [
     CommonModule,

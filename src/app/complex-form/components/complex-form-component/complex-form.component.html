@@ -9,40 +9,46 @@
             <mat-form-field appearance="fill">
               <mat-label>Prénom</mat-label>
               <input type="text" matInput formControlName="firstName">
+              <mat-error>Ce champ est réquis</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill">
               <mat-label>nom</mat-label>
               <input type="text" matInput formControlName="lastName">
+              <mat-error>Ce champ est réquis</mat-error>
             </mat-form-field>
           </div>
         </mat-card>
-        <mat-card class="form-card">
+        <mat-card class="form-card" >
           <mat-card-title>Comment préférez-vous êtres contacté(e) ?</mat-card-title>
         <mat-radio-group [formControl]="contactPreferenceCtrl" align="'start'">
-            <mat-radio-button value="email">Mail</mat-radio-button>
+            <mat-radio-button value="email">E-mail</mat-radio-button>
             <mat-radio-button value="phone">Téléphone</mat-radio-button>
         </mat-radio-group>
         </mat-card>
-        <mat-card class="form-card">
+        <mat-card class="form-card" *ngIf="showEmailCtrl$ |async">
           <mat-card-title>E-mail</mat-card-title>
             <div class="form-row">
               <mat-form-field appearance="fill" [formGroup]="emailFrom" >
-                <mat-label>Addresse mail</mat-label>
-                <input type="text" matInput formControlName="email">
+                <mat-label>Addresse e-mail</mat-label>
+                <input type="email" matInput formControlName="email">
+                <mat-error >{{ getFormControlErrorText(emailCtrl) }}</mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="fill">
-                <mat-label>Mail confirme</mat-label>
+                <mat-label>E-mail confirme</mat-label>
                 <input type="text" matInput formControlName="confirm">
+                <mat-error >{{ getFormControlErrorText(confirmEmailCtrl) }}</mat-error>
               </mat-form-field>
             </div>
+            <small class="error-text" *ngIf="showEmailError$ |async">Les Email ne correspond pas !</small>
         </mat-card>
-        <mat-card class="form-card">
+        <mat-card class="form-card" *ngIf="showPhoneCtrl$	 | async">
           <mat-card-title>Téléphone</mat-card-title>
           <mat-form-field appearance="fill">
             <mat-label>Numéro de téléphone</mat-label>
             <input type="text" matInput [formControl]="phoneCtrl" >
+            <mat-error >{{ getFormControlErrorText(phoneCtrl) }}</mat-error>
           </mat-form-field>
         </mat-card>
         <mat-card class="form-card" [formGroup]="loginForm" >
@@ -50,22 +56,28 @@
           <mat-form-field appearance="fill">
             <mat-label>Nom d'utilisateur</mat-label>
             <input type="text" matInput formControlName="username" >
+            <mat-error>Ce champ est réquis</mat-error>
           </mat-form-field>
           <div class="form-row">
-            <mat-form-field appearance="fill" [formGroup]="loginForm" >
+            <mat-form-field appearance="fill" >
               <mat-label>Motde pass</mat-label>
               <input type="password" matInput formControlName="password">
+              <mat-error>Ce champ est réquis</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill">
               <mat-label>Confirmé votre mot de pass</mat-label>
               <input type="password" matInput formControlName="confirmPassword">
+              <mat-error>Ce champ est réquis</mat-error>
             </mat-form-field>
           </div>
+          <small class="error-text" *ngIf="showPhoneError$ |async">Les mot de pass ne correspond pas</small>
         </mat-card>
     </mat-card-content>
     <mat-card-actions align="end" *ngIf="mainForm.valid">
-        <button mat-flat-button (click)="sendForm()" color="primary">Enregistrer</button>
+      <button mat-flat-button (click)="sendForm()" [disabled]="loading" color="primary">Enregistrer</button>
+      <!-- <mat-progress-spinner mode="indeterminate" *ngIf="loading"  color="primary"></mat-progress-spinner> -->
+      <mat-spinner mode="indeterminate" *ngIf="loading" align="start"  color="primary"></mat-spinner>
     </mat-card-actions>
 </mat-card>
 
